@@ -1,3 +1,4 @@
+print("Importing libraries")
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -86,4 +87,5 @@ if __name__ == "__main__":
 
     model_path = "weights/Modeliukas.h5"
     torch.save(model, model_path)
+    evaluate(model, test_loader, device)
     # model = torch.load(model_path, map_location=device)

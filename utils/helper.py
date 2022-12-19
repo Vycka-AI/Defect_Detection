@@ -167,18 +167,8 @@ def predict_localize(
             )
 
             if class_pred == NEG_CLASS:
-                x_0, y_0, x_1, y_1 = get_bbox_from_heatmap(heatmap, thres)
-                rectangle = Rectangle(
-                    (x_0, y_0),
-                    x_1 - x_0,
-                    y_1 - y_0,
-                    edgecolor="red",
-                    facecolor="none",
-                    lw=3,
-                )
-                plt.gca().add_patch(rectangle)
                 if show_heatmap:
-                    plt.imshow(heatmap, cmap="Greens", alpha=0.8)
+                    plt.imshow(heatmap, cmap="YlGn", alpha=0.8)
 
             if counter == n_samples:
                 plt.tight_layout()
