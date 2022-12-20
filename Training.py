@@ -76,11 +76,11 @@ def train(dataloader, model, optimizer, criterion, epochs, device, target_accura
 
         epoch_loss = running_loss / n_samples #epochos (klaidos tikimybes) skaiciavimas
         epoch_acc = running_corrects.double() / n_samples #epochos accuracy (tikslumo) skaiciavimas)
-        print("Loss = {:.4f}, Accuracy = {:.4f}".format(epoch_loss, epoch_acc))
+        print("Loss = {:.4f}, Tikslumas = {:.4f}".format(epoch_loss, epoch_acc))
 
         if target_accuracy != None: #kai norimas tikslumas nustatytas
             if epoch_acc > target_accuracy: #nutraukti jei pasiektas norimas tikslumas
-                print("Early Stopping")
+                print("Stabdoma...")
                 break
 
     return model

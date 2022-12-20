@@ -37,7 +37,7 @@ class CustomVGG(nn.Module):
             return scores
 
         else:
-            # ----------- Galutinės vertės    ---------- #
+            # ----------- Galutinės vertės, normalizuojamas tensorius    ---------- #
             probs = nn.functional.softmax(scores, dim=-1)
             # ----------- Galutiniai svoriai  ---------- #
             weights = self.Linear.weight
@@ -46,9 +46,10 @@ class CustomVGG(nn.Module):
             weights = (weights.unsqueeze(-1).unsqueeze(-1).unsqueeze(0).repeat((x.size(0), 1, 1, 14, 14)))
             print(weights)
             feature_maps = feature_maps.unsqueeze(1).repeat((1, probs.size(1), 1, 1, 1))
-            location = torch.mul(weights, feature_maps).sum(axis=2) #Dauginama, sumuojama
-            location = F.interpolate(location, size=INPUT_IMG_SIZE, mode="bilinear") #Input tensor, output spacial size, algorithm mode
+            location = torch.mul(weights, feature_maps).sum(axis=2) #Dauginama iš svorių, sumuojama, kad sumažėtų dimensijų skaičius
+            location = F.interpolate(location, size=INPUT_IMG_SIZE, mode="bilinear") #Panaudojama, kad iš 14 x 14 Heatmap pavirstų į turimo paveikslėlio dydį atvaizduoti defektams
 
+            #Normavimas heatmap
             maxs, _ = location.max(dim=-1, keepdim=True)
             maxs, _ = maxs.max(dim=-2, keepdim=True)
             mins, _ = location.min(dim=-1, keepdim=True)
