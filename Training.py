@@ -114,5 +114,5 @@ if __name__ == "__main__":
 
     model_path = "weights/Modeliukas_changed.h5"
     torch.save(model, model_path)
-    evaluate(model, test_loader, device)
+    # evaluate(model, test_loader, device)
     # model = torch.load(model_path, map_location=device)
