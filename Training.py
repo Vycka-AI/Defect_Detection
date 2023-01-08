@@ -34,11 +34,12 @@ def Get_Train_test_loaders(main_folder, batch_size, test_size=0.2, random_state=
     test_loader = DataLoader(dataset, batch_size=batch_size, sampler=test_sampler, drop_last=False)
     return train_loader, test_loader
 
-def train(dataloader, model, optimizer, criterion, epochs, device, target_accuracy=None):
+def train(dataloader, model, optimizer, loss_fn, epochs, device, target_accuracy=None):
     """
     Script to train a model. Returns trained model.
     """
     model.to(device)
+    #Set model to training mode
     model.train()
 
     for epoch in range(1, epochs + 1):
@@ -61,7 +62,7 @@ def train(dataloader, model, optimizer, criterion, epochs, device, target_accura
             preds_class = torch.argmax(preds_scores, dim=-1)
 
             #Skaičiuojama paklaida
-            loss = criterion(preds_scores, labels)
+            loss = loss_fn(preds_scores, labels)
 
             #Skaičiuojamas gradienatas d_loss/d_x
             loss.backward()
@@ -106,11 +107,11 @@ if __name__ == "__main__":
     #Geriems paveiksliukams duodamas mažesnis svoris, defektuotiems - didesnis
     class_weight = [1, 3]
     class_weight = torch.tensor(class_weight).type(torch.FloatTensor).to(device)
-    criterion = nn.CrossEntropyLoss(weight=class_weight)
+    loss_fn = nn.CrossEntropyLoss(weight=class_weight)
     #Parenkamas optimizatorius mokymui
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-    model = train(train_loader, model, optimizer, criterion, num_epochs, device, target_train_accuracy)
+    model = train(train_loader, model, optimizer, loss_fn, num_epochs, device, target_train_accuracy)
 
     model_path = "weights/Modeliukas_changed.h5"
     torch.save(model, model_path)
